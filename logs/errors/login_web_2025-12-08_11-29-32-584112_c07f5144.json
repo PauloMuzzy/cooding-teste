@@ -1,0 +1,18 @@
+{
+  "timestamp": "2025-12-08T11:29:32.584112",
+  "data": "2025-12-08",
+  "hora": "11:29:32",
+  "nivel": "ERROR",
+  "contexto": "login_web",
+  "mensagem": "Erro ao baixar HTML: pages/public/logins.html",
+  "hash": "c07f5144",
+  "dados_adicionais": {
+    "error": "TemplateNotFound"
+  },
+  "informacoes_sistema": {
+    "sistema_operacional": "Windows",
+    "versao_python": "3.12.0",
+    "plataforma": "Windows-11-10.0.26100-SP0"
+  },
+  "stack_trace": "Traceback (most recent call last):\n  File \"C:\\Users\\paulo\\OneDrive\\Documentos\\workspace\\info-local\\myapp\\controllers\\web\\auth_web.py\", line 11, in get_html\n    return templates.TemplateResponse(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\paulo\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\starlette\\templating.py\", line 112, in TemplateResponse\n    template = self.get_template(name)\n               ^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\paulo\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\starlette\\templating.py\", line 94, in get_template\n    return self.env.get_template(name)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\paulo\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\jinja2\\environment.py\", line 1010, in get_template\n    return self._load_template(name, globals)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\paulo\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\jinja2\\environment.py\", line 969, in _load_template\n    template = self.loader.load(self, name, self.make_globals(globals))\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\paulo\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\jinja2\\loaders.py\", line 126, in load\n    source, filename, uptodate = self.get_source(environment, name)\n                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\paulo\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\jinja2\\loaders.py\", line 218, in get_source\n    raise TemplateNotFound(template)\njinja2.exceptions.TemplateNotFound: pages/public/logins.html\n"
+}

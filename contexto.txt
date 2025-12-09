@@ -1,0 +1,96 @@
+### Tecnologias e Padrões Obrigatórios
+- Backend: FastAPI puro (sem ORM)
+- Banco de dados: MySQL 8.0+
+- Frontend: HTML5 + CSS (Bootstrap 5.3) + JavaScript vanilla + jQuery 3.7+
+- Template engine: Jinja2 (integrado via fastapi.responses.HTMLResponse e templates configurados com Jinja2Templates)
+- Arquitetura: MVC estrito com separação clara de responsabilidades
+- Logs: JSON estruturados em ./logs/ (rotacionados diariamente)
+- Ambiente: variáveis via .env (python-dotenv)
+
+### Estrutura de Pastas (OBRIGATÓRIA – não fuja nem um milímetro)
+project-root/
+├── app.py                      # ponto de entrada único (cria e retorna a app FastAPI)
+├── .env
+├── config/
+│   ├── init.py
+│   ├── database.py             # pool de conexões MySQL + get_db() com contextmanager
+│   ├── ...                   
+├── controllers/
+│   ├── api/                    # rotas JSON (return JSONResponse ou Pydantic)
+│   │   ├── init.py
+│   │   ├── auth.py
+│   │   └── ...
+│   └── web/                    # rotas que renderizam HTML (return templates.TemplateResponse)
+│       ├── init.py
+│       ├── auth.py
+│       └── ...
+├── repositories/
+│   ├── init.py
+│   ├── auth_repository.py       # apenas funções puras com SQL + execute/query
+│   └── ...
+├── schemas/
+│   ├── init.py
+│   ├── auth.py                 # Pydantic models (UserCreate, UserLogin, UserOut, etc)
+│   └── ...
+├── services/
+│   ├── init.py
+│   ├── auth_service.py         # login, register, hash_password, verify_password
+│   └── ...
+├── utils/
+│   ├── init.py
+│   ├── logger.py               # logger JSON estruturado com rotação
+│   ├── helpers.py              # funções reutilizáveis (slugify, generate_code, etc)
+│   └── ...
+├── views/
+│   ├── templates/              # Jinja2 templates
+│   │   ├── layouts/
+│   │   │   ├── auth_base.html
+│   │   │   └── public_base.html
+│   │   ├── components/
+│   │   │   ├── navbar.html
+│   │   │   └── header.html
+│   │   ├── pages/
+│   │   │   ├── auth
+│   │   │   |   ├── dashboard.html
+|   |   |   ├── public
+│   │   │   |   ├── login.html
+│   │   └── error/
+│   └── static/
+│       ├── css/
+│       ├── js/
+│       └── img/
+└── logs/
+└── app-2025-12-08.json
+
+### REGRAS DE SEPARAÇÃO DE RESPONSABILIDADES (IMUTÁVEIS)
+
+- controllers/: apenas roteamento e orquestração. Nunca SQL, nunca regra de negócio, nunca hash de senha.
+- services/: única camada permitida para regra de negócio, validação de domínio e chamada a múltiplos repositories.
+- repositories/: contém SOMENTE funções que executam SQL puro. Recebem (conn, cursor) ou db já injetado e retornam dados brutos ou UUID.
+- schemas/: apenas modelos Pydantic (entrada, saída, banco).
+- config/: singletons globais (pool de conexões, JWT, templates, settings).
+- utils/: funções puras reutilizáveis (logger, bcrypt context, helpers).
+- views/templates/: arquivos Jinja2 que herdam obrigatoriamente de layouts/base.html usando blocos title/content/extra_css/extra_js.
+- views/static/: arquivos estáticos (CSS/JS/imagens).
+
+### EXMPLO DE FLUXO BÁSICO ###
+controllers/web/auth_controller.py  (GET /login)
+   ↓
+→ retorna TemplateResponse("auth/login.html")   ← apenas entrega página
+
+controllers/web/auth_controller.py  (POST /login)
+   ↓
+→ chama services/auth_service.authenticate_user(username, password)
+       ← regra de negócio + hash check
+        ↓
+     → chama repositories/user_repository.get_user_by_username(db, username)   ← apenas SELECT
+        ↓
+     → verifica senha com bcrypt (utils/security.py)
+        ↓
+     → gera JWT (config/jwt.py ou services/jwt_service.py)
+        ↓
+     → grava log de login bem-sucedido
+   ↓
+→ controller define cookie HttpOnly com o token
+→ RedirectResponse(url="/dashboard", status_code=302)
+→ Cliente agora está logado (cookie + JWT válido)
