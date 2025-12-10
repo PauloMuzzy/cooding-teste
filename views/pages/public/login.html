@@ -1,174 +1,193 @@
 {% extends "layouts/public_base.html" %}
 {% block content %}
-<style>
-    body {
-        background: #f8f9fa url('/static/images/2600x1200/bg-10.png') center/cover no-repeat;
-        min-height: 100vh;
-        margin: 0;
-    }
+    <style>
+        body {
+            background: #f8f9fa url("/static/images/2600x1200/bg-10.png") center/cover no-repeat;
+            min-height: 100vh;
+            margin: 0;
+        }
 
-    main {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
-        padding: 1rem;
-    }
-    
-    #form-login {
-        background: white;
-        padding: 2.5rem;
-        border-radius: 12px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
-        width: 100%;
-        max-width: 420px;
-        display: flex;
-        flex-direction: column;
-        gap: 1.8rem;
-    }
+        main {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1rem;
+        }
 
-    .form-title {
-        margin: 0;
-        font-weight: 600;
-        color: #212529;
-    }
+        #form-login {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+            width: 100%;
+            max-width: 420px;
+            display: flex;
+            flex-direction: column;
+            gap: 1.8rem;
+        }
 
-    .form-subtitle {
-        margin: 0.5rem 0 0;
-        color: #6c757d;
-        font-weight: 400;
-    }
+        .form-title {
+            margin: 0;
+            font-weight: 600;
+            color: #212529;
+        }
 
-    #btn-login {
-        margin-top: 0.5rem;
-        padding: 0.75rem;
-        font-weight: 500;
-        width: 100%;
-    }
-    
-    #toggle-password {
-        border-top-left-radius: 0;
-        border-bottom-left-radius: 0;
-        border-color: #dee2e6;
-    }
-</style>
-<main>
-    <form id="form-login" data-client-uuid="{{ client_uuid }}">
-        <div>
-            <h1 class="form-title h3">Entrar</h1>
-            <p class="form-subtitle"><strong>Info Local</strong> – sua plataforma de gestão</p>
-        </div>
-        <div>
-            <label for="access_code" class="form-label fw-medium">Código de acesso</label>
-            <div class="input-group input-group-sm">
-                <input type="password" name="access_code" id="access_code" class="form-control"
-                    placeholder="Digite seu código de acesso" autocomplete="off" required autofocus>
-                <button class="btn btn-outline-secondary" type="button" id="toggle-password" tabindex="-1">
-                    <i class="bi bi-eye"></i>
-                </button>
+        .form-subtitle {
+            margin: 0.5rem 0 0;
+            color: #6c757d;
+            font-weight: 400;
+        }
+
+        #btn-login {
+            margin-top: 0.5rem;
+            padding: 0.75rem;
+            font-weight: 500;
+            width: 100%;
+        }
+
+        #toggle-password {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+            border-color: #dee2e6;
+        }
+    </style>
+    <main>
+        <form id="form-login" data-client-uuid="{{ client_uuid }}">
+            <div>
+                <h1 class="form-title h3">Entrar</h1>
+                <p class="form-subtitle"><strong>Info Local</strong> – sua plataforma de gestão</p>
             </div>
-            <div id="login-message" class="mt-3" style="display: block;"></div>
-            {% if error %}
-            <div class="alert mt-3 mb-0">{{ error }}</div>
-            {% endif %}
-            <button type="submit" class="btn btn-primary btn-sm" id="btn-login">
-                Entrar
-            </button>
-        </div>
-    </form>
-</main>
-<script>
-    $(document).ready(function () {
-        const $form = $("#form-login")
-        const $inputCode = $("#access_code")
-        const $btnLogin = $("#btn-login")
-        const $message = $("#login-message")
-        const clientUuid = $form.data("client-uuid")
+            <div>
+                <label for="access_code" class="form-label fw-medium">Código de acesso</label>
+                <div class="input-group input-group-sm">
+                    <input
+                        type="password"
+                        name="access_code"
+                        id="access_code"
+                        class="form-control"
+                        placeholder="Digite seu código de acesso"
+                        autocomplete="off"
+                        required
+                        autofocus />
+                    <button
+                        class="btn btn-outline-secondary"
+                        type="button"
+                        id="toggle-password"
+                        tabindex="-1">
+                        <i class="bi bi-eye"></i>
+                    </button>
+                </div>
+                <div id="login-message" class="mt-3" style="display: block"></div>
+                {% if error %}
+                    <div class="alert mt-3 mb-0">{{ error }}</div>
+                {% endif %}
+                <button type="submit" class="btn btn-primary btn-sm" id="btn-login">Entrar</button>
+            </div>
+        </form>
+    </main>
+    <script>
+        $(document).ready(function () {
+            const $form = $("#form-login");
+            const $inputCode = $("#access_code");
+            const $btnLogin = $("#btn-login");
+            const $message = $("#login-message");
+            const clientUuid = $form.data("client-uuid");
 
-        $("#toggle-password").on("click", function () {
-            const isPassword = $inputCode.attr("type") === "password"
-            $inputCode.attr("type", isPassword ? "text" : "password")
-            $(this).find("i").toggleClass("bi-eye bi-eye-slash", 150)
-        })
+            $("#toggle-password").on("click", function () {
+                const isPassword = $inputCode.attr("type") === "password";
+                $inputCode.attr("type", isPassword ? "text" : "password");
+                $(this).find("i").toggleClass("bi-eye bi-eye-slash", 150);
+            });
 
-        $form.on("submit", function (e) {
-            e.preventDefault()
-            const accessCode = $inputCode.val().trim()
-            if (!accessCode) {
-                showMessage("Por favor, insira seu código de acesso.", "danger")
-                $inputCode.trigger("focus")
-                return
-            }
-
-            setButtonLoading(true)
-            hideMessage()
-
-            $.ajax({
-                url: `api/v1/login/${clientUuid}`,
-                method: "POST",
-                data: {
-                                access_code: accessCode
-                },
-                dataType: "json",
-                timeout: 12000
-            })
-            .done(function (response) {
-                setButtonRedirecting(true)
-                setTimeout(() => {
-                    window.location.href = response.redirect || "/relatorio-avancado"
-                }, 900)
-            })
-            .fail(function (xhr) {
-                let msg = "Erro inesperado. Tente novamente."
-                switch (xhr.status) {
-                    case 401: msg = "Código de acesso inválido, tente novamente e se o error persistir, entre em contato com seu administrador."; break
-                    case 404: msg = "Link inválido ou revogado."; break
-                    case 429: msg = "Muitas tentativas. Aguarde alguns minutos."; break
-                    default:
-                        if (xhr.responseJSON && xhr.responseJSON.detail) {
-                            msg = xhr.responseJSON.detail
-                        }
-                        break
+            $form.on("submit", function (e) {
+                e.preventDefault();
+                const accessCode = $inputCode.val().trim();
+                if (!accessCode) {
+                    showMessage("Por favor, insira seu código de acesso.", "danger");
+                    $inputCode.trigger("focus");
+                    return;
                 }
 
-                showMessage(msg, "danger")
-                $inputCode.trigger("focus").select()
-                setButtonLoading(false)
-            })
-        })
+                setButtonLoading(true);
+                hideMessage();
 
-        function setButtonLoading(isLoading) {
-            $btnLogin.prop("disabled", true)
-            $btnLogin.removeClass("btn-success").addClass("btn-primary")
-            $btnLogin.html(isLoading
-                ? `<span class="spinner-border spinner-border-sm me-2"></span>Verificando...`
-                : "Entrar"
-            )
-        }
+                $.ajax({
+                    url: `api/v1/login/${clientUuid}`,
+                    method: "POST",
+                    data: {
+                        access_code: accessCode
+                    },
+                    dataType: "json",
+                    timeout: 12000
+                })
+                    .done(function (response) {
+                        setButtonRedirecting(true);
+                        setTimeout(() => {
+                            window.location.href = response.redirect || "/relatorio-avancado";
+                        }, 900);
+                    })
+                    .fail(function (xhr) {
+                        let msg = "Erro inesperado. Tente novamente.";
+                        switch (xhr.status) {
+                            case 401:
+                                msg =
+                                    "Código de acesso inválido, tente novamente e se o error persistir, entre em contato com seu administrador.";
+                                break;
+                            case 404:
+                                msg = "Link inválido ou revogado.";
+                                break;
+                            case 429:
+                                msg = "Muitas tentativas. Aguarde alguns minutos.";
+                                break;
+                            default:
+                                if (xhr.responseJSON && xhr.responseJSON.detail) {
+                                    msg = xhr.responseJSON.detail;
+                                }
+                                break;
+                        }
 
-        function setButtonRedirecting(active) {
-            if (active) {
-                $btnLogin
-                    .prop("disabled", true)
-                    .removeClass("btn-primary")
-                    .addClass("btn-success")
-                    .html(`<span class="spinner-border spinner-border-sm me-2"></span>Redirecionando...`)
+                        showMessage(msg, "danger");
+                        $inputCode.trigger("focus").select();
+                        setButtonLoading(false);
+                    });
+            });
+
+            function setButtonLoading(isLoading) {
+                $btnLogin.prop("disabled", true);
+                $btnLogin.removeClass("btn-success").addClass("btn-primary");
+                $btnLogin.html(
+                    isLoading
+                        ? `<span class="spinner-border spinner-border-sm me-2"></span>Verificando...`
+                        : "Entrar"
+                );
             }
-        }
 
-        function showMessage(text, type = "danger") {
-            $message
-                .removeClass("alert-danger alert-success alert-warning")
-                .addClass(`alert alert-${type}`)
-                .html(text)
-                .stop(true)
-                .hide()
-                .fadeIn(300)
-        }
+            function setButtonRedirecting(active) {
+                if (active) {
+                    $btnLogin
+                        .prop("disabled", true)
+                        .removeClass("btn-primary")
+                        .addClass("btn-success")
+                        .html(
+                            `<span class="spinner-border spinner-border-sm me-2"></span>Redirecionando...`
+                        );
+                }
+            }
 
-        function hideMessage() {
-            $message.fadeOut(200)
-        }
-    });
-</script>
+            function showMessage(text, type = "danger") {
+                $message
+                    .removeClass("alert-danger alert-success alert-warning")
+                    .addClass(`alert alert-${type}`)
+                    .html(text)
+                    .stop(true)
+                    .hide()
+                    .fadeIn(300);
+            }
+
+            function hideMessage() {
+                $message.fadeOut(200);
+            }
+        });
+    </script>
 {% endblock %}

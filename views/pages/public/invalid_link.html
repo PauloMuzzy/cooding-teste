@@ -1,0 +1,26 @@
+{% extends "layouts/public_base.html" %}{% block title %}Link de Acesso Invalido{% endblock %}
+{% block content %}
+    <main class="d-flex align-items-center justify-content-center min-vh-100 bg-light">
+        <div class="text-center p-5 max-w-lg">
+            <div class="mb-5">
+                <i class="bi bi-exclamation-triangle-fill text-warning" style="font-size: 4rem"></i>
+            </div>
+            <h1 class="display-5 fw-bold mb-4">Link de Acesso Inválido</h1>
+            <p class="lead text-muted mb-4">
+                Você acessou a página de login sem um link válido.
+                <br />
+                Cada cliente possui um link de acesso pessoal e intransferível.
+            </p>
+            <div class="alert alert-info">
+                <strong>Por favor, contate o administrador</strong> para solicitar o seu link de
+                acesso válido.
+            </div>
+            <div class="mt-4">
+                <a href="/" class="btn btn-outline-primary">Voltar à página inicial</a>
+            </div>
+            <div class="mt-5">
+                <small class="text-muted">Info Local © 2025 - Todos os direitos reservados</small>
+            </div>
+        </div>
+    </main>
+{% endblock content %}

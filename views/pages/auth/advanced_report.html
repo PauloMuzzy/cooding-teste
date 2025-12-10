@@ -1,39 +1,38 @@
 {% extends "layouts/auth_base.html" %}
 {% block title %}Relatório Avançado{% endblock %}
 {% block content %}
-<style>
-    main {
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: flex-start;
-        min-height: 100vh;
-        padding: 16px;
-        margin: 0px 16px 16px 16px;
-        background-color: #ffffff;
-        border: solid 1px #dee2e6;
-        border-radius: 8px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
-    }
+    <style>
+        main {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 16px;
+            margin: 0px 16px 16px 16px;
+            background-color: #ffffff;
+            border: solid 1px #dee2e6;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+        }
 
-    #card-content-wrapper {
-        padding: 16px;
-        border: solid 1px #dee2e6;
-        border-radius: 8px;
-        height: 300px;
-        width: 100%;
-    }
-</style>
-<main>
-    {% include 'components/breadcrumb.html' %}
-    <div class="card" id="card-content-wrapper">
-        <div class="card-body">
-            <p class="card-text text-center text-muted">
-                <strong>Cliente UUID:</strong> {{ client_uuid }}
-            </p>
+        #card-content-wrapper {
+            padding: 16px;
+            border: solid 1px #dee2e6;
+            border-radius: 8px;
+            height: 300px;
+            width: 100%;
+        }
+    </style>
+    <main>
+        {% include 'components/breadcrumb.html' %}
+        <div class="card" id="card-content-wrapper">
+            <div class="card-body">
+                <p class="card-text text-center text-muted">
+                    <strong>Cliente UUID:</strong> {{ client_uuid }}
+                </p>
+            </div>
         </div>
-    </div>
-</main>
-<script>
-</script>
-{% endblock %}
+    </main>
+    <script></script>
+{% endblock content %}

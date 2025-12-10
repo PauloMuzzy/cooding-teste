@@ -1,9 +1,7 @@
-# repositories/auth_repository.py
 from typing import Optional
 from uuid import UUID
 from config.database import get_db
 from datetime import datetime
-
 
 class AuthRepository:
     async def get_client_by_uuid(self, client_uuid: str) -> Optional[dict]:
@@ -15,11 +13,10 @@ class AuthRepository:
             return cursor.fetchone()
 
     async def create_session(
-        self, client_id: int, token_hash: str, expires_at: datetime
-    ) -> None:
+        self, client_id: int, token_hash: str, expires_at: datetime) -> None:
         async with get_db() as (conn, cursor):
             cursor.execute(
-                """
+                """ 
                 INSERT INTO client_sessions (client_id, token_hash, expires_at)
                 VALUES (%s, %s, %s)
                 """,

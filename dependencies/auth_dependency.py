@@ -5,7 +5,6 @@ from utils.security import SecurityUtils
 auth_repo = AuthRepository()
 security = SecurityUtils()
 
-
 async def get_current_client(request: Request):
     token = request.cookies.get("session_token")
     if not token:

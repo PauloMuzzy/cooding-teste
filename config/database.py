@@ -1,4 +1,3 @@
-# config/database.py
 from contextlib import asynccontextmanager
 import os
 import mysql.connector
@@ -19,9 +18,7 @@ DB_CONFIG = {
     "pool_size": int(os.getenv("DB_POOL_SIZE", 10)),
 }
 
-# Pool global (inicializado uma única vez)
 cnxpool: pooling.MySQLConnectionPool | None = None
-
 
 def init_pool() -> None:
     global cnxpool
@@ -32,14 +29,8 @@ def init_pool() -> None:
             log_error(f"Erro ao criar pool MySQL: {err}", "database_pool")
             raise
 
-
 @asynccontextmanager
 async def get_db():
-    """
-    Uso recomendado:
-    async with get_db() as (conn, cursor):
-        cursor.execute(...)
-    """
     if cnxpool is None:
         init_pool()
 
@@ -49,7 +40,7 @@ async def get_db():
         conn = cnxpool.get_connection()
         cursor = conn.cursor(dictionary=True)
         yield conn, cursor
-        conn.commit()  # só faz commit se não houve exceção
+        conn.commit()
     except Exception as e:
         if conn:
             conn.rollback()
@@ -59,4 +50,4 @@ async def get_db():
         if cursor:
             cursor.close()
         if conn:
-            conn.close()  # devolve ao pool
+            conn.close()

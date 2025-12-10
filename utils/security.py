@@ -5,7 +5,6 @@ import hashlib
 
 ph = PasswordHasher()
 
-
 class SecurityUtils:
     def hash_access_code(self, code: str) -> str:
         return ph.hash(code)

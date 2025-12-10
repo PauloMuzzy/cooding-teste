@@ -5,7 +5,6 @@ from datetime import datetime, timedelta
 from typing import Tuple, Optional, Dict
 import uuid
 
-
 class AuthService:
     def __init__(self):
         self.repo = AuthRepository()
@@ -81,7 +80,6 @@ class AuthService:
             token = self.sec.create_secure_token()
             token_hash = self.sec.hash_token(token)
             expires_at = datetime.utcnow() + timedelta(days=30)
-
             await self.repo.create_session(client_id, token_hash, expires_at)
             return True, token
 

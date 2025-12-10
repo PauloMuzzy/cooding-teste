@@ -7,7 +7,6 @@ from dependencies.auth_dependency import get_current_client
 templates = Jinja2Templates(directory="views")
 router = APIRouter()
 
-
 @router.get("/relatorio-avancado", response_class=HTMLResponse)
 async def get_html(
     request: Request, client_session: dict = Depends(get_current_client)
